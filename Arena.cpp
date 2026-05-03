@@ -58,11 +58,9 @@ void Arena::run_round() {
     print_board();
 
     for (std::size_t i=0; i < _robots.size(); i++){
-        if(has_winner()){
-            return;
+        if(!has_winner()){
+            process_robot_turn(i);
         }
-
-        process_robot_turn(i);
         print_robot_status(i);
     }
 }
@@ -277,6 +275,7 @@ bool Arena::load_robots(){
         RobotBase* robot = create_robot_instance(shared_lib_path, handle);
         if (robot == nullptr){continue;}
 
+        robot->m_name = source_path.stem().string();
         robot->m_character = assign_robot_symbol(i);
         robot->set_boundaries(_arena_height, _arena_width);
         _robots.push_back(robot);
